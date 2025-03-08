@@ -116,6 +116,38 @@ const industryKeywords = {
   ],
 };
 
+// Add more pet-specific patterns
+const petPatterns = {
+  prefixes: [
+    'Happy', 'Lucky', 'Sweet', 'Silly', 'Fluffy', 'Fuzzy', 'Snowy', 'Sunny', 'Misty', 'Shadow',
+    'Sparkly', 'Cuddly', 'Bouncy', 'Zippy', 'Wiggly', 'Giggly', 'Puffy', 'Cozy', 'Snuggly', 'Perky'
+  ],
+  suffixes: [
+    'paw', 'tail', 'whisker', 'bean', 'nose', 'fur', 'ears', 'face', 'spot', 'patch',
+    'heart', 'star', 'moon', 'sky', 'cloud', 'drop', 'fluff', 'puff', 'snap', 'pop'
+  ],
+  colors: [
+    'Black', 'White', 'Gray', 'Brown', 'Golden', 'Silver', 'Copper', 'Rusty', 'Sandy', 'Ginger',
+    'Cream', 'Chocolate', 'Cinnamon', 'Honey', 'Amber', 'Ebony', 'Ivory', 'Mocha', 'Toffee', 'Caramel'
+  ]
+};
+
+// Add more hashtag patterns
+const hashtagPatterns = {
+  prefixes: [
+    'trending', 'viral', 'best', 'top', 'daily', 'weekly', 'monthly', 'ultimate', 'premium', 'pro',
+    'super', 'mega', 'ultra', 'hyper', 'epic', 'awesome', 'amazing', 'perfect', 'ideal', 'essential'
+  ],
+  suffixes: [
+    'life', 'style', 'goals', 'vibes', 'mood', 'moments', 'times', 'days', 'inspiration', 'motivation',
+    'community', 'squad', 'team', 'crew', 'gang', 'fam', 'nation', 'world', 'universe', 'lifestyle'
+  ],
+  connectors: [
+    'And', 'With', 'Plus', 'Meets', 'Loves', 'For', 'Of', 'In', 'On', 'At',
+    'By', 'To', 'Via', 'Through', 'Beyond', 'Over', 'Under', 'Around', 'About', 'Through'
+  ]
+};
+
 function shuffleArray<T>(array: T[]): T[] {
   const newArray = [...array];
   for (let i = newArray.length - 1; i > 0; i--) {
@@ -201,41 +233,89 @@ function generateBabyName(gender: string = 'any', startsWith: string = '', endsW
 }
 
 function generatePetName(petType: string = 'dog', characteristics: string = ''): string {
-  const petNames = patterns.pet[petType as keyof typeof patterns.pet] || patterns.pet.other;
   const traits = characteristics.toLowerCase().split(' ').filter(Boolean);
+  const petNames = patterns.pet[petType as keyof typeof patterns.pet] || patterns.pet.other;
   
-  // 50% chance to use a predefined name or generate a new one
-  if (Math.random() > 0.5 || traits.length === 0) {
-    return petNames[Math.floor(Math.random() * petNames.length)];
-  } else {
-    const prefix = traits[Math.floor(Math.random() * traits.length)];
-    const suffix = petNames[Math.floor(Math.random() * petNames.length)];
-    return prefix.charAt(0).toUpperCase() + prefix.slice(1) + suffix;
+  // Different name generation strategies
+  const strategies = [
+    // Strategy 1: Use predefined name
+    () => petNames[Math.floor(Math.random() * petNames.length)],
+    
+    // Strategy 2: Combine prefix with pet name
+    () => {
+      const prefix = petPatterns.prefixes[Math.floor(Math.random() * petPatterns.prefixes.length)];
+      const name = petNames[Math.floor(Math.random() * petNames.length)];
+      return `${prefix}${name}`;
+    },
+    
+    // Strategy 3: Use color with suffix
+    () => {
+      const color = petPatterns.colors[Math.floor(Math.random() * petPatterns.colors.length)];
+      const suffix = petPatterns.suffixes[Math.floor(Math.random() * petPatterns.suffixes.length)];
+      return `${color}${suffix}`;
+    },
+    
+    // Strategy 4: Use trait-based name
+    () => {
+      if (traits.length > 0) {
+        const trait = traits[Math.floor(Math.random() * traits.length)];
+        const suffix = petPatterns.suffixes[Math.floor(Math.random() * petPatterns.suffixes.length)];
+        return trait.charAt(0).toUpperCase() + trait.slice(1) + suffix;
+      }
+      return null;
+    }
+  ];
+
+  // Try strategies until we get a valid name
+  for (const strategy of shuffleArray(strategies)) {
+    const name = strategy();
+    if (name) return name;
   }
+
+  // Fallback to default strategy
+  return petNames[Math.floor(Math.random() * petNames.length)];
 }
 
 function generateHashtag(word1: string = '', word2: string = ''): string {
-  const w1 = word1 || 'awesome';
-  const w2 = word2 || 'vibes';
+  const w1 = word1 || hashtagPatterns.prefixes[Math.floor(Math.random() * hashtagPatterns.prefixes.length)];
+  const w2 = word2 || hashtagPatterns.suffixes[Math.floor(Math.random() * hashtagPatterns.suffixes.length)];
   
   const combinations = [
+    // Basic combinations
     `#${w1}${w2}`,
     `#${w1}_${w2}`,
     `#${w2}${w1}`,
-    `#${w1}And${w2}`,
-    `#${w1}${w2}Time`,
-    `#${w2}With${w1}`,
+    
+    // With connectors
+    ...hashtagPatterns.connectors.map(connector => 
+      `#${w1}${connector}${w2}`
+    ),
+    
+    // With suffixes
     `#${w1}${w2}Life`,
-    `#${w1}${w2}World`,
+    `#${w1}${w2}Goals`,
+    `#${w1}${w2}Vibes`,
+    
+    // With prefixes
+    `#Daily${w1}${w2}`,
+    `#Best${w1}${w2}`,
+    `#Top${w1}${w2}`,
+    
+    // Special formats
     `#The${w1}${w2}`,
     `#${w1}${w2}Community`,
+    `#${w1}${w2}Nation`,
+    `#${w1}${w2}World`,
+    
+    // Year-based (current year)
+    `#${w1}${w2}${new Date().getFullYear()}`,
   ];
   
   return combinations[Math.floor(Math.random() * combinations.length)];
 }
 
 export function generateNames(type: string, answers: any): string[] {
-  const count = 10; // Increased to 10 names per generation
+  const count = 20; // Generate 20 names per batch
   const names: string[] = [];
   const usedNames = new Set<string>();
 
@@ -243,28 +323,45 @@ export function generateNames(type: string, answers: any): string[] {
     let name = '';
     switch (type) {
       case 'business':
-      case 'website':
-      case 'product':
-      case 'app':
-        name = generateBusinessName(answers.description, answers.style, answers.industry);
+        name = generateBusinessName(
+          answers.description, 
+          answers.style || 'brandable', 
+          answers.industry || 'all'
+        );
         break;
       case 'baby':
-        name = generateBabyName(answers.gender, answers.startsWith, answers.endsWith);
+        name = generateBabyName(
+          answers.gender, 
+          answers.startsWith, 
+          answers.endsWith
+        );
         break;
       case 'pet':
-        name = generatePetName(answers.petType, answers.characteristics);
+        name = generatePetName(
+          answers.petType || 'dog',
+          answers.description || ''
+        );
         break;
       case 'hashtag':
-        name = generateHashtag(answers.word1, answers.word2);
+        const words = (answers.description || '').split(' ');
+        name = generateHashtag(
+          words[0] || '',
+          words[1] || ''
+        );
         break;
       default:
-        name = generateBusinessName(answers.description, 'brandable', 'all');
+        name = generateBusinessName(answers.description || '', 'brandable', 'all');
     }
 
     // Only add unique names
     if (!usedNames.has(name)) {
       names.push(name);
       usedNames.add(name);
+    }
+
+    // Prevent infinite loop if we can't generate enough unique names
+    if (usedNames.size === names.length && names.length < count && usedNames.size > 0) {
+      break;
     }
   }
 

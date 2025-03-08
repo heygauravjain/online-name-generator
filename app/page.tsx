@@ -70,12 +70,12 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       {/* Header */}
-      <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-10">
+      <header className="border-b border-blue-100 bg-white/80 backdrop-blur-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row justify-between items-center py-4 gap-4">
-            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+            <h1 className="text-2xl font-bold text-blue-600">
               AI Name Generator
             </h1>
             <Tabs 
@@ -83,12 +83,12 @@ export default function Home() {
               onValueChange={handleTypeChange}
               className="w-full md:w-auto"
             >
-              <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full bg-gray-100/50 p-1 rounded-xl">
+              <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full bg-blue-50/50 p-1 rounded-xl">
                 {generatorTypes.map((type) => (
                   <TabsTrigger 
                     key={type.id} 
                     value={type.id}
-                    className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm"
+                    className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:shadow-sm text-blue-500"
                   >
                     {type.name}
                   </TabsTrigger>
@@ -103,10 +103,10 @@ export default function Home() {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="max-w-3xl mx-auto text-center space-y-8">
           <div className="space-y-4">
-            <h2 className="text-4xl font-bold text-gray-900">
+            <h2 className="text-4xl font-bold text-blue-900">
               {generatorTypes.find(t => t.id === selectedType)?.name}
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-blue-600">
               {generatorTypes.find(t => t.id === selectedType)?.description}
             </p>
           </div>
@@ -119,16 +119,16 @@ export default function Home() {
                   placeholder={getPlaceholder(selectedType)}
                   value={keywords}
                   onChange={(e) => setKeywords(e.target.value)}
-                  className="h-14 text-lg px-6 rounded-2xl shadow-sm border-gray-200 bg-white focus:border-blue-500 focus:ring-blue-500"
+                  className="h-14 text-lg px-6 rounded-2xl shadow-sm border-blue-200 bg-white focus:border-blue-400 focus:ring-blue-400"
                 />
                 <Button
                   type="submit"
-                  className="absolute right-2 top-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white h-10 px-6 rounded-xl hover:opacity-90 transition-opacity"
+                  className="absolute right-2 top-2 bg-blue-600 hover:bg-blue-700 text-white h-10 px-6 rounded-xl transition-colors"
                 >
                   Generate
                 </Button>
               </div>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-blue-500">
                 Press Enter or click Generate to start
               </p>
             </form>

@@ -19,16 +19,11 @@ interface NameResultsProps {
 }
 
 const colors = [
-  'bg-blue-50',
-  'bg-purple-50',
-  'bg-pink-50',
-  'bg-green-50',
-  'bg-yellow-50',
-  'bg-orange-50',
-  'bg-red-50',
-  'bg-indigo-50',
-  'bg-teal-50',
-  'bg-cyan-50',
+  'bg-blue-50 hover:bg-blue-100',
+  'bg-blue-100 hover:bg-blue-200',
+  'bg-indigo-50 hover:bg-indigo-100',
+  'bg-sky-50 hover:bg-sky-100',
+  'bg-cyan-50 hover:bg-cyan-100',
 ];
 
 const colorCache: { [key: string]: string } = {};
@@ -106,17 +101,17 @@ export default function NameResults({ type, answers, onStartOver }: NameResultsP
     return (
       <div className="space-y-8">
         <div className="flex justify-between items-center">
-          <div className="h-8 w-48 bg-gray-200 rounded animate-pulse"></div>
-          <div className="h-8 w-24 bg-gray-200 rounded animate-pulse"></div>
+          <div className="h-8 w-48 bg-blue-100 rounded animate-pulse"></div>
+          <div className="h-8 w-24 bg-blue-100 rounded animate-pulse"></div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {[...Array(20)].map((_, i) => (
             <div key={i} className="animate-pulse">
-              <div className="h-28 bg-gray-200 rounded-xl">
+              <div className="h-28 bg-blue-50 rounded-xl">
                 <div className="p-4 space-y-3">
-                  <div className="h-5 bg-gray-300 rounded w-3/4"></div>
-                  <div className="h-4 bg-gray-300 rounded w-1/2"></div>
-                  <div className="h-4 bg-gray-300 rounded w-1/3"></div>
+                  <div className="h-5 bg-blue-100 rounded w-3/4"></div>
+                  <div className="h-4 bg-blue-100 rounded w-1/2"></div>
+                  <div className="h-4 bg-blue-100 rounded w-1/3"></div>
                 </div>
               </div>
             </div>
@@ -129,11 +124,11 @@ export default function NameResults({ type, answers, onStartOver }: NameResultsP
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-gray-900">Generated Names</h2>
+        <h2 className="text-2xl font-bold text-blue-900">Generated Names</h2>
         <Button
           onClick={onStartOver}
           variant="outline"
-          className="border-gray-200 hover:bg-gray-50"
+          className="border-blue-200 hover:bg-blue-50 text-blue-700"
         >
           Start Over
         </Button>
@@ -143,11 +138,11 @@ export default function NameResults({ type, answers, onStartOver }: NameResultsP
         {names.slice(0, displayCount).map((name, index) => (
           <div
             key={`${name.name}-${index}`}
-            className={`${getColorForName(name.name)} rounded-xl p-4 transition-all hover:scale-105 cursor-pointer group relative`}
+            className={`${getColorForName(name.name)} rounded-xl p-4 transition-all hover:scale-105 cursor-pointer group relative shadow-sm`}
           >
-            <div className="text-lg font-semibold text-gray-900">{name.name}</div>
+            <div className="text-lg font-semibold text-blue-900">{name.name}</div>
             {name.seoScore && (
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-blue-700">
                 SEO Score: {name.seoScore}
               </div>
             )}
@@ -157,11 +152,11 @@ export default function NameResults({ type, answers, onStartOver }: NameResultsP
               </div>
             )}
             {(name.meaning || name.origin || name.personality) && (
-              <div className="opacity-0 group-hover:opacity-100 absolute left-0 right-0 bottom-full mb-2 bg-white p-3 rounded-lg shadow-lg z-10 text-sm">
-                {name.meaning && <div><strong>Meaning:</strong> {name.meaning}</div>}
-                {name.origin && <div><strong>Origin:</strong> {name.origin}</div>}
+              <div className="opacity-0 group-hover:opacity-100 absolute left-0 right-0 bottom-full mb-2 bg-white p-3 rounded-lg shadow-lg z-10 text-sm border border-blue-100">
+                {name.meaning && <div className="text-blue-800"><strong>Meaning:</strong> {name.meaning}</div>}
+                {name.origin && <div className="text-blue-800"><strong>Origin:</strong> {name.origin}</div>}
                 {name.personality && (
-                  <div><strong>Traits:</strong> {name.personality.join(', ')}</div>
+                  <div className="text-blue-800"><strong>Traits:</strong> {name.personality.join(', ')}</div>
                 )}
               </div>
             )}
@@ -172,10 +167,10 @@ export default function NameResults({ type, answers, onStartOver }: NameResultsP
       {loadingMore && (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 animate-pulse">
           {[...Array(5)].map((_, i) => (
-            <div key={`loading-${i}`} className="h-28 bg-gray-200 rounded-xl">
+            <div key={`loading-${i}`} className="h-28 bg-blue-50 rounded-xl">
               <div className="p-4 space-y-3">
-                <div className="h-5 bg-gray-300 rounded w-3/4"></div>
-                <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+                <div className="h-5 bg-blue-100 rounded w-3/4"></div>
+                <div className="h-4 bg-blue-100 rounded w-1/2"></div>
               </div>
             </div>
           ))}
@@ -187,18 +182,18 @@ export default function NameResults({ type, answers, onStartOver }: NameResultsP
           <Button
             onClick={handleLoadMore}
             disabled={loadingMore}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-2 rounded-xl hover:opacity-90 transition-opacity"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-2 rounded-xl transition-colors"
           >
             {loadingMore ? 'Loading...' : 'Load More Names'}
           </Button>
-          <p className="text-sm text-gray-500 mt-2">
+          <p className="text-sm text-blue-600 mt-2">
             Showing {Math.min(displayCount, names.length)} of {names.length} names
           </p>
         </div>
       )}
 
       {!hasMore && (
-        <div className="text-center text-gray-600 mt-4">
+        <div className="text-center text-blue-600 mt-4">
           All available names have been loaded
         </div>
       )}
